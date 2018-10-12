@@ -12,7 +12,7 @@ Textlabel stfric;
 float mu_s;
 float mu_k;
 int force;
-int mass;
+float mass;
 int theta;
 boolean updown;
 
@@ -33,7 +33,7 @@ void setup() {
     .setRange(0,50);
   cp5.addSlider("mass")
     .setPosition(20,80)
-    .setRange(0,1500);
+    .setRange(0,5);
   cp5.addSlider("theta")
     .setPosition(20,100)
     .setRange(0,89);
@@ -89,11 +89,11 @@ void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
   }
 }
 
-float normal_force(int m, float theta) {
+float normal_force(float m, float theta) {
   // mgcos(theta)
   // m is in grams, so /1000
-  f_n.setText("Normal force: " + (float(m)/1000)*9.8*cos(theta) + "N");
-  return (float(m)/1000)*9.8*cos(theta);
+  f_n.setText("Normal force: " + m*9.8*cos(theta) + "N");
+  return m*9.8*cos(theta);
 }
 
 float friction(float mu, float f_n) {
@@ -101,8 +101,8 @@ float friction(float mu, float f_n) {
   return mu*f_n;
 }
 
-float acceleration(float st, float kn, int m, int theta, int app) {
-  float f_right = app + (float(m)/1000)*9.8*sin(theta); // forces applied in the rightward direction
+float acceleration(float st, float kn, float m, float theta, int app) {
+  float f_right = app + m*9.8*sin(theta); // forces applied in the rightward direction
   if (f_right < st) { 
     accel.setText("Acceleration: 0 m/s^2");
     return 0; // we aren't moving if we aren't able to overcome static friction
