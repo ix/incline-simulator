@@ -1,45 +1,53 @@
-  import controlP5.*;
+import controlP5.*;
+import java.util.*;
 
-  ControlP5 cp5;
-  int v1;
+ControlP5 cp5;
 
-  void setup() {
-    size(800, 400);  
-    noStroke();
-    cp5 = new ControlP5(this);
-    cp5.addSlider("v1")
-       .setPosition(40, 40)
-       .setSize(200, 20)
-       .setRange(100, 300)
-       .setValue(250)
-       .setColorCaptionLabel(color(20,20,20));
-  }
+Slider blah;
+Textlabel time;
+ //<>//
+int mu_s; // frictional coefficients /100
+int mu_k;
+int force;
+int mass;
+int theta;
 
-  void draw() {
-    background(200, 200, 200);
+int myColor = color(0,0,0);
 
-    pushMatrix();
+void setup() {
+  size(800,400);
+  noStroke();
+  cp5 = new ControlP5(this);
+  
+  cp5.addSlider("mu_s")
+    .setPosition(20,20)
+    .setRange(0,150);
+    
+  cp5.addSlider("mu_k")
+    .setPosition(20,40)
+    .setRange(0,150);
+    
+  cp5.addSlider("force")
+    .setPosition(20,60)
+    .setRange(0,150);
+  
+  cp5.addSlider("mass")
+    .setPosition(20,80)
+    .setRange(0,150);
+  
+  cp5.addSlider("theta")
+    .setPosition(20,100)
+    .setRange(0,90);
+    
+  cp5.addButton("play")
+    .setValue(0)
+    .setPosition(20,120)
+    .setSize(200,19);
+}
 
-    pushMatrix();
-    fill(255, 255, 0);
-    rect(v1, 100, 60, 200);
-    fill(0, 255, 110);
-    rect(40, v1, 320, 40);
-    translate(200, 200);
-    rotate(map(v1, 100, 300, -PI, PI));
-    fill(255, 0, 128);
-    rect(0, 0, 100, 100);
-    popMatrix();
+void draw() {
+  background(120);
+}
 
-    translate(600, 100);
-    for (int i=0; i<20; i++) {
-      pushMatrix();
-      fill(255);
-      translate(0, i*10);
-      rotate(map(v1+i, 0, 300, -PI, PI));
-      rect(-150, 0, 300, 4);
-      popMatrix();
-    }
-
-    popMatrix();
-  }
+void slider(float nice) {
+}
