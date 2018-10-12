@@ -16,8 +16,6 @@ int mass;
 int theta;
 boolean updown;
 
-int myColor = color(0,0,0);
-
 void setup() {
   size(800,400);
   noStroke();
@@ -78,7 +76,7 @@ void draw() {
   stfric.setText("Static friction: " + mu_s*normal_force(mass, radians(theta)) + "N");
   println(acceleration(friction(mu_s, normal_force(mass, radians(theta))),
                        friction(mu_k, normal_force(mass, radians(theta))),
-                       mass, theta, force));
+                       mass, radians(theta), force));
 }
 
 void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
@@ -104,7 +102,7 @@ float friction(float mu, float f_n) {
 }
 
 float acceleration(float st, float kn, int m, int theta, int app) {
-  float f_right = app + (float(m)/1000)*9.8*sin(radians(theta)); // forces applied in the rightward direction
+  float f_right = app + (float(m)/1000)*9.8*sin(theta); // forces applied in the rightward direction
   if (f_right < st) { 
     accel.setText("Acceleration: 0 m/s^2");
     return 0; // we aren't moving if we aren't able to overcome static friction
