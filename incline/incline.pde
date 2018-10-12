@@ -57,5 +57,15 @@ void draw() {
   background(120);
   stroke(0);
   
-  triangle(200,50,200,350,750,350);
+  //triangle(200,50,200,350,750,350);
+  dynamic_triangle(200, 50, 550, 300, radians(theta));
+}
+
+// TODO: probably holding the wrong point constant?
+void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
+  if (atan(y/x) == theta) { // maximum bound
+    triangle(xoff, yoff, xoff, yoff+y, xoff+x, yoff+y);
+  } else if (atan(y/x) < theta) { // scale y
+    triangle(xoff, yoff, xoff, yoff+x*tan(theta), xoff+x, yoff+x*tan(theta));
+  }
 }
