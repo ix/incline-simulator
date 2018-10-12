@@ -61,11 +61,12 @@ void draw() {
   dynamic_triangle(200, 50, 550, 300, radians(theta));
 }
 
-// TODO: probably holding the wrong point constant?
 void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
-  if (atan(y/x) == theta) { // maximum bound
+  if (atan2(y,x) == theta) { // maximum bound
     triangle(xoff, yoff, xoff, yoff+y, xoff+x, yoff+y);
-  } else if (atan(y/x) < theta) { // scale y
-    triangle(xoff, yoff, xoff, yoff+x*tan(theta), xoff+x, yoff+x*tan(theta));
+  } else if (atan2(y,x) > theta) { // scale y
+    triangle(xoff, yoff+y, xoff+x, yoff+y, xoff, yoff+y-x*tan(theta));
+  } else if (atan2(y,x) < theta) { // scale x
+    triangle(xoff, yoff+y, xoff+(y/tan(theta)), yoff+y, xoff, yoff);
   }
 }
