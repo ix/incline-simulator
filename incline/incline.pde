@@ -122,3 +122,13 @@ float acceleration(float st, float kn, float m, float theta, int app) {
     return ((f_app-f_kinetic)/m); // a=F/m
   }
 }
+
+float position(float a, float t) {
+  // x=v0t+1/2at^2, assumed that we're starting from rest, so v0=0
+  return 0.5*a*pow(t, 2);
+}
+
+float velocity(float a, float t) {
+  // v=v0+at, assumed we're starting from rest, so v0=0
+  return a*t;
+}
