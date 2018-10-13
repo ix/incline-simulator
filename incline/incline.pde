@@ -102,12 +102,23 @@ float friction(float mu, float f_n) {
 }
 
 float acceleration(float st, float kn, float m, float theta, int app) {
-  float f_right = app + m*9.8*sin(theta); // forces applied in the rightward direction
-  if (f_right < st) { 
-    accel.setText("Acceleration: 0 m/s^2");
+  float f_app;
+  float f_static;
+  float f_kinetic;
+  if (updown) {
+    f_app = app;
+    f_static = st + m*9.8*sin(theta);
+    f_kinetic = kn + m*9.8*sin(theta);
+  } else {
+    f_app = app + m*9.8*sin(theta);
+    f_static = st;
+    f_kinetic = kn;
+  }
+  if (f_app < f_static) { 
+    accel.setText("Acceleration: 0m/s^2");
     return 0; // we aren't moving if we aren't able to overcome static friction
   } else {
-    accel.setText("Acceleration: " + ((f_right-kn)/m) + "m/s^2");
-    return ((f_right-kn)/m); // a=F/m
+    accel.setText("Acceleration: " + ((f_app-f_kinetic)/m) + "m/s^2");
+    return ((f_app-f_kinetic)/m); // a=F/m
   }
 }
