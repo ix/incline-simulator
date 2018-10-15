@@ -16,6 +16,8 @@ float mass;
 int theta;
 boolean updown;
 
+int time = 0;
+
 void setup() {
   size(800,400);
   noStroke();
@@ -73,10 +75,16 @@ void draw() {
   
   //triangle(200,50,200,350,750,350);
   dynamic_triangle(200, 50, 550, 300, radians(theta));
+  dynamic_mass(mass, radians(theta));
   stfric.setText("Static friction: " + mu_s*normal_force(mass, radians(theta)) + "N");
+  time_elapsed.setText("Time elapsed: " + time + "s");
   println(acceleration(friction(mu_s, normal_force(mass, radians(theta))),
                        friction(mu_k, normal_force(mass, radians(theta))),
                        mass, radians(theta), force));
+}
+
+void play() {
+  time += 1;
 }
 
 void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
@@ -87,6 +95,13 @@ void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
   } else if (atan2(y,x) < theta) { // scale x
     triangle(xoff, yoff+y, xoff+(y/tan(theta)), yoff+y, xoff, yoff);
   }
+}
+
+void dynamic_mass(float m, float theta) {
+  pushMatrix(); // initialize the new coordinate system
+  rotate(theta);
+  rect(40,40,40,40);
+  popMatrix();
 }
 
 float normal_force(float m, float theta) {
