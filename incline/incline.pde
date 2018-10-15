@@ -75,7 +75,7 @@ void draw() {
   
   //triangle(200,50,200,350,750,350);
   dynamic_triangle(200, 50, 550, 300, radians(theta));
-  dynamic_mass(mass, radians(theta));
+  dynamic_mass(mass, radians(theta), 40);
   stfric.setText("Static friction: " + mu_s*normal_force(mass, radians(theta)) + "N");
   time_elapsed.setText("Time elapsed: " + time + "s");
   println(acceleration(friction(mu_s, normal_force(mass, radians(theta))),
@@ -97,10 +97,14 @@ void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
   }
 }
 
-void dynamic_mass(float m, float theta) {
+void dynamic_mass(float m, float theta, int pos) {
   pushMatrix(); // initialize the new coordinate system
+  translate(200,50);
+  if (theta<atan(300.0/550)) {
+     translate(0,300-550*tan(theta)); 
+  }
   rotate(theta);
-  rect(40,40,40,40);
+  rect(pos,-40,40,40);
   popMatrix();
 }
 
