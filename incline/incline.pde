@@ -15,8 +15,14 @@ int force;
 float mass;
 int theta;
 boolean updown;
+boolean running;
 
-int time = 0;
+int ms_since_begin;
+int ms_since_button;
+
+float obj_pos = 0;
+float curr_acc = 0;
+float hypotenuse = 100;
 
 void setup() {
   size(800,400);
@@ -41,10 +47,11 @@ void setup() {
     .setRange(0,89);
     
   // buttons
-  cp5.addButton("play")
-    .setValue(0)
+  cp5.addToggle("running")
     .setPosition(20,160)
-    .setSize(130,19);
+    .setSize(50,20)
+    .setValue(false)
+    .setMode(ControlP5.SWITCH);
   cp5.addToggle("updown")
     .setPosition(20,120)
     .setSize(50,20)
@@ -73,18 +80,44 @@ void draw() {
   background(120);
   stroke(0);
   
-  //triangle(200,50,200,350,750,350);
+  ms_since_begin = millis();
+
   dynamic_triangle(200, 50, 550, 300, radians(theta));
-  dynamic_mass(mass, radians(theta), 40);
+  dynamic_mass(radians(theta), int(obj_pos));
   stfric.setText("Static friction: " + mu_s*normal_force(mass, radians(theta)) + "N");
-  time_elapsed.setText("Time elapsed: " + time + "s");
-  println(acceleration(friction(mu_s, normal_force(mass, radians(theta))),
-                       friction(mu_k, normal_force(mass, radians(theta))),
-                       mass, radians(theta), force));
+  curr_acc = acceleration(friction(mu_s, normal_force(mass, radians(theta))),
+                          friction(mu_k, normal_force(mass, radians(theta))),
+                          mass, radians(theta), force);
+                       
+  if (running) {    
+    float ctime = (ms_since_begin - ms_since_button) * 0.001;
+    
+    if (updown) {
+      obj_pos = hypotenuse - position(ctime, curr_acc);
+      println(obj_pos);
+      if (obj_pos < 0) {
+        running = false;
+      }
+    } else {
+      obj_pos = position(ctime, curr_acc);
+      if (obj_pos > hypotenuse) {
+        running = false;
+      }
+    }
+  }
 }
 
-void play() {
-  time += 1;
+void running(boolean flag) {
+  running = flag;
+  if (flag) {
+    ms_since_button = millis();
+  } else {
+    if (updown) {
+      obj_pos = hypotenuse;
+    } else {
+      obj_pos = 0;
+    }
+  }
 }
 
 void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
@@ -97,7 +130,7 @@ void dynamic_triangle(int xoff, int yoff, int x, int y, float theta) {
   }
 }
 
-void dynamic_mass(float m, float theta, int pos) {
+void dynamic_mass(float theta, int pos) {
   pushMatrix(); // initialize the new coordinate system
   translate(200,50);
   if (theta<atan(300.0/550)) {
